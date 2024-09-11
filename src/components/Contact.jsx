@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import '../Contact.css'
-import { base_url } from '../utils/constants'
+import { base_url, period_month } from '../utils/constants'
 
 const Contact = () => {
   const [planets, setPlanets] = useState(['wait...']);
@@ -10,10 +10,19 @@ const Contact = () => {
     const data = await response.json();
     const planets = data.map(item => item.name);
     setPlanets(planets);
+    localStorage.setItem('planets', JSON.stringify({
+      payload: planets,
+      time: Date.now()
+    }));
   }
 
   useEffect(() => {
-    fillPlanets();
+    const planets = JSON.parse(localStorage.getItem('planets'));
+    if (planets && ((Date.now() - planets.time) < period_month)) {
+      setPlanets(planets.payload);
+    } else {
+      fillPlanets();
+    }
   }, [])
 
   return (
