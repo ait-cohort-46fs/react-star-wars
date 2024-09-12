@@ -4,14 +4,19 @@ import Footer from './components/Footer'
 import Header from './components/Header'
 import Main from './components/Main'
 import { navItems } from './utils/constants'
+import { SWContext } from './utils/context'
 
 function App() {
   const [page, setPage] = useState(navItems[0])
 
   return (
     <div className='container-fluid'>
-      <Header changePage={setPage} />
-      <Main page={page} />
+      <SWContext.Provider value={{
+        page, changePage: setPage
+      }}>
+        <Header />
+        <Main />
+      </SWContext.Provider>
       <Footer />
     </div>
 
